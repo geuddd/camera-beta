@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Feed</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #camera {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <video id="camera" autoplay playsinline></video>
+    <script>
+        var video = document.getElementById('camera');
+        var fitScreen = true;
+
+        // Function to toggle between fitting and filling the screen
+        function toggleFit() {
+            if (fitScreen) {
+                video.style.objectFit = "contain";
+                fitScreen = false;
+            } else {
+                video.style.objectFit = "cover";
+                fitScreen = true;
+            }
+        }
+
+        // Get access to the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+                video.onloadedmetadata = function(e) {
+                    video.play();
+                };
+            })
+            .catch(function(err) {
+                console.log("An error occurred: " + err);
+            });
+
+        // Event listener for the "e" key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'e') {
+                toggleFit();
+            }
+        });
+    </script>
+</body>
+</html>
